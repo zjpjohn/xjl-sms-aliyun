@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.xjl</groupId>
+  <artifactId>xjl-sms-aliyun</artifactId>
+  <version>0.0.1</version>
+  <packaging>jar</packaging>
+
+  <name>xjl-sms-aliyun</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <distributionManagement>
+		<repository>
+			<id>user-releases</id>
+			<url>http://123.57.4.104:8881/nexus/content/repositories/releases/</url>
+		</repository>
+	</distributionManagement>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.xjl</groupId>
+  		<artifactId>xjl-notification-sms</artifactId>
+  		<version>0.0.2</version>
+  	</dependency>
+  </dependencies>
+</project>
