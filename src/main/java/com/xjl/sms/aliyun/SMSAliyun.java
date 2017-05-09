@@ -24,9 +24,8 @@ public class SMSAliyun implements SMS {
 	public final static String TEMPLATE_CODE_OF_VALIDATE = "TEMPLATE_CODE_OF_VALIDATE"; //验证短信模板CODE
 	public final static String TEMPLATE_CODE_OF_INFORM = "TEMPLATE_CODE_OF_INFORM"; //通知短信模板CODE
 	public final static String TEMPLATE_CODE_OF_PROMOTION = "TEMPLATE_CODE_OF_PROMOTION";//推广短信模板CODE
-	@Autowired
-	private VerifyCode verifyCode;
-	public boolean send(String phone, String content) {
+	
+	public boolean sendSMS(String phone, String content) {
 		try {
 		IClientProfile profile = DefaultProfile.getProfile(aliyun_sms_region_id, aliyun_sms_access_key_id, aliyun_sms_access_key_secret);
         DefaultProfile.addEndpoint(aliyun_sms_end_point_name, aliyun_sms_region_id, aliyun_sms_product,aliyun_sms_domain);
@@ -42,10 +41,7 @@ public class SMSAliyun implements SMS {
 			throw new RuntimeException(e);
 		}
 	}
-	public boolean sendVercode(String phone){
-		String content = this.verifyCode.generate(phone, 1) ;
-		return this.send(phone, content);
+	public boolean sendVerifyCode(String phone,String verifyCode){
+		return this.sendSMS(phone, verifyCode);
 	}
-
-
 }
