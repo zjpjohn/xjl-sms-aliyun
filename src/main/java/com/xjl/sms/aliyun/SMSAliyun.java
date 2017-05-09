@@ -1,5 +1,8 @@
 package com.xjl.sms.aliyun;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.profile.DefaultProfile;
@@ -7,8 +10,10 @@ import com.aliyuncs.profile.IClientProfile;
 import com.aliyuncs.sms.model.v20160927.SingleSendSmsRequest;
 import com.aliyuncs.sms.model.v20160927.SingleSendSmsResponse;
 import com.xjl.notification.sms.SMS;
-
+import com.xjl.notification.verifyCode.VerifyCode;
+@Service
 public class SMSAliyun implements SMS {
+	
 	private static final String aliyun_sms_region_id = "cn-hangzhou";
 	private static final String aliyun_sms_access_key_id = "LTAIc3r9adaIXwpH";
 	private static final String aliyun_sms_access_key_secret = "i86XebUFjiDY7cDQVCFFpPQBOUTcZt";
@@ -19,16 +24,17 @@ public class SMSAliyun implements SMS {
 	public final static String TEMPLATE_CODE_OF_VALIDATE = "TEMPLATE_CODE_OF_VALIDATE"; //验证短信模板CODE
 	public final static String TEMPLATE_CODE_OF_INFORM = "TEMPLATE_CODE_OF_INFORM"; //通知短信模板CODE
 	public final static String TEMPLATE_CODE_OF_PROMOTION = "TEMPLATE_CODE_OF_PROMOTION";//推广短信模板CODE
-	
+	@Autowired
+	private VerifyCode verifyCode;
 	public boolean send(String phone, String content) {
 		try {
 		IClientProfile profile = DefaultProfile.getProfile(aliyun_sms_region_id, aliyun_sms_access_key_id, aliyun_sms_access_key_secret);
         DefaultProfile.addEndpoint(aliyun_sms_end_point_name, aliyun_sms_region_id, aliyun_sms_product,aliyun_sms_domain);
         IAcsClient client = new DefaultAcsClient(profile);
         SingleSendSmsRequest request = new SingleSendSmsRequest();
-        request.setSignName(SIGN_NAME_PUXIN);
-        request.setTemplateCode(TEMPLATE_CODE_OF_INFORM);
-        request.setParamString(null);
+        request.setSignName("测试");
+        request.setTemplateCode("SMS_56155265");
+        request.setParamString("{\"name\":\""+content+"\"}");
         request.setRecNum(phone);
         SingleSendSmsResponse response = client.getAcsResponse(request);//短信发送
         return true;
@@ -36,9 +42,10 @@ public class SMSAliyun implements SMS {
 			throw new RuntimeException(e);
 		}
 	}
-	public static void main(String[] args) {
-		SMSAliyun sms = new SMSAliyun();
-		sms.send("13815892591", "");
+	public boolean sendVercode(String phone){
+		String content = this.verifyCode.generate(phone, 1) ;
+		return this.send(phone, content);
 	}
+
 
 }
